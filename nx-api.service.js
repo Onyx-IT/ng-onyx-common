@@ -4,9 +4,9 @@
 	angular.module('onyxCommon').service('NxApiService', NxApiService);
 
 	/** @ngInject */
-	function NxApiService($http, $q, $location, appConfig, APP_CONSTANT) { // jshint
-																			// ignore:line
+	function NxApiService($http, $q, $location, $rootScope, appConfig, APP_CONSTANT, ApplicationSetup) { // jshint ignore:line
 		var service = {};
+		var isLoaded = false;
 
 		service.callLocalService = function(serviceName, callMethod, payload) {
 			return service
@@ -15,7 +15,9 @@
 
 		service.callService = function(serviceName, callMethod, payload, errorLocation,
 				isPrivate, contentType) {
-
+            if(!ApplicationSetup.isLoaded()){
+                ApplicationSetup.setup($rootScope.application);
+            }
 			if (APP_CONSTANT.API_CONFIG.ENABLE_MOCK_MODE) {
 				$http.defaults.headers.common.Authorization = 'MOCK_MODE';
 				return service._callService(serviceName, callMethod, payload, errorLocation,
@@ -28,6 +30,11 @@
 
 		service._callService = function(serviceName, callMethod, payload, errorLocation,
 				isRemote, isPrivate, contentType) {
+
+            if(!ApplicationSetup.isLoaded()){
+                ApplicationSetup.setup($rootScope.application);
+            }
+
 			var deferred = $q.defer();
 			var apiLocation = _createURL(serviceName, callMethod, isRemote,
 					isPrivate);
