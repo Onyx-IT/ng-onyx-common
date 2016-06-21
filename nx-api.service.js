@@ -14,20 +14,23 @@
         };
 
         service.callService = function (serviceName, callMethod, payload, errorLocation,
-                                        contentType) {
+                                        contentType, responseType) {
 
             return service._callService(serviceName, callMethod, payload, errorLocation,
-                true, contentType);
+                true, contentType, responseType);
         };
 
         service._callService = function (serviceName, callMethod, payload, errorLocation,
-                                         isRemote, contentType) {
+                                         isRemote, contentType, responseType) {
             var deferred = $q.defer();
             var apiLocation = _createURL(serviceName, callMethod, isRemote);
 
             // IE cache Ajax calls. appending current date and time will burst
             // the cache
             apiLocation = apiLocation + '?t=' + new Date().getTime();
+
+            if(!responseType)
+                responseType = "json";
 
             if (contentType) {
                 $http.defaults.headers.put["Content-Type"] = contentType;
@@ -41,7 +44,8 @@
             $http({
                 method: callMethod,
                 url: apiLocation,
-                data: payload
+                data: payload,
+                responseType: responseType
             }).then(function (success) {
                 var responseHeaders = _headersGetter(success.headers);
 
