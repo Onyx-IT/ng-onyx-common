@@ -8,7 +8,8 @@
     "./onyx-common.js",
     "./logout.service.js",
     "./nx-api.service.js",
-    "./nx-common.service.js"
+    "./nx-common.service.js",
+    "./onyx.directives.js"
   ],
   "moduleType": [
     "globals",
