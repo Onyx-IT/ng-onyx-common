@@ -70,13 +70,17 @@
                     if (validator.type === 'string') {
                         if (validator.setValues === null || validator.setValues.length === 0) {
                             mCtrl.$parsers.push(stringValidator);
+                            stringValidator(scope.$parent.$eval(attr.ngModel));
                         } else {
                             mCtrl.$parsers.push(selectValidator);
+                            selectValidator(scope.$parent.$eval(attr.ngModel));
                         }
                     } else if (validator.type === 'integer') {
                         mCtrl.$parsers.push(integerValidator);
+                        integerValidator(scope.$parent.$eval(attr.ngModel));
                     } else if (validator.type === 'decimal') {
                         mCtrl.$parsers.push(decimalValidator);
+                        decimalValidator(scope.$parent.$eval(attr.ngModel));
                     } else {
                         alert("Wrong rule: " + ruleValidator);
                     }
