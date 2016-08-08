@@ -56,31 +56,38 @@
                 var rule = ruleValidator.split(".");
                 var validator = null;
 
-                if (rule[0] === 'PR') {
-                    validator = scope.rules.paymentRecord[obtainNameValidator(rule[1])];
-                } else if (rule[0] === 'PA') {
-                    validator = scope.rules.paymentAgency[obtainNameValidator(rule[1])];
-                } else if (rule[0] === 'PP') {
-                    validator = scope.rules.paymentProcess[obtainNameValidator(rule[1])];
-                } else if (rule[0] === 'TX') {
-                    validator = scope.rules.tax[obtainNameValidator(rule[1])];
+                var rule_0 = rule[0];
+                var rule_1 = rule[1];
+
+                if (rule_0 === 'pr') {
+                    validator = scope.rules.paymentRecord[rule_1];
+                } else if (rule_0 === 'pa') {
+                    validator = scope.rules.paymentAgency[rule_1];
+                } else if (rule_0 === 'pp') {
+                    validator = scope.rules.paymentProcess[rule_1];
+                } else if (rule_0 === 'tx') {
+                    validator = scope.rules.tax[rule_1];
                 }
 
                 if (validator != null) {
                     if (validator.type === 'string') {
                         if (validator.setValues === null || validator.setValues.length === 0) {
                             mCtrl.$parsers.push(stringValidator);
-                            stringValidator(scope.$parent.$eval(attr.ngModel));
+                            //stringValidator(scope.$parent.$eval(attr.ngModel));
+                            stringValidator(scope.$eval(attr.ngModel));
                         } else {
                             mCtrl.$parsers.push(selectValidator);
-                            selectValidator(scope.$parent.$eval(attr.ngModel));
+                            //selectValidator(scope.$parent.$eval(attr.ngModel));
+                            selectValidator(scope.$eval(attr.ngModel));
                         }
                     } else if (validator.type === 'integer') {
                         mCtrl.$parsers.push(integerValidator);
-                        integerValidator(scope.$parent.$eval(attr.ngModel));
+                        //integerValidator(scope.$parent.$eval(attr.ngModel));
+                        integerValidator(scope.$eval(attr.ngModel));
                     } else if (validator.type === 'decimal') {
                         mCtrl.$parsers.push(decimalValidator);
-                        decimalValidator(scope.$parent.$eval(attr.ngModel));
+                        //decimalValidator(scope.$parent.$eval(attr.ngModel));
+                        decimalValidator(scope.$eval(attr.ngModel));
                     } else {
                         alert("Wrong rule: " + ruleValidator);
                     }
@@ -104,10 +111,11 @@
                 function stringValidator(value) {
                     mCtrl.$setValidity('required', true);
                     mCtrl.$setValidity('ruleValidator', true);
-                    if (validator.required && (value === null || value.length === 0)) {
+                    if (validator.required && (value == undefined || value === null || value.length === 0)) {
                         mCtrl.$setValidity('required', false);
                     } else {
-                        if (value != null &&
+                        if (value != undefined &&
+                            value != null &&
                             value.length > validator.length) {
                             mCtrl.$setValidity('ruleValidator', false);
                         }
@@ -118,9 +126,9 @@
                 function integerValidator(value) {
                     mCtrl.$setValidity('required', true);
                     mCtrl.$setValidity('ruleValidator', true);
-                    if (validator.required && (value === null || value.length === 0)) {
+                    if (validator.required && (value == undefined || value === null || value.length === 0)) {
                         mCtrl.$setValidity('required', false);
-                    } else if (value != null) {
+                    } else if (value != undefined && value != null && value.length > 0) {
                         var myRe = /[^0-9]/;
                         var aux = myRe.exec(value);
                         if ( aux != null ||
@@ -134,9 +142,9 @@
                 function decimalValidator(value) {
                     mCtrl.$setValidity('required', true);
                     mCtrl.$setValidity('ruleValidator', true);
-                    if (validator.required && (value === null || value.length === 0)) {
+                    if (validator.required && (value == undefined || value === null || value.length === 0)) {
                         mCtrl.$setValidity('required', false);
-                    } else if (value != null) {
+                    } else if (value != undefined && value != null && value.length > 0) {
                         var myRe = /[^0-9\.]/;
                         var aux = myRe.exec(value);
                         if ( aux != null ||
@@ -146,19 +154,18 @@
                             value.indexOf('.', value.length - 1) != -1 ||
                             (value.split('.').length === 2 && value.split('.')[1].length > validator.precision)) {
                             mCtrl.$setValidity('ruleValidator', false);
-                        } else {
                         }
                     }
                     return value;
                 }
 
                 function selectValidator(value) {
-                    mCtrl.$setValidity('ruleValidator', null);
-                    mCtrl.$error.required = false;
-                    if (validator.required && (value === null || value.length === 0)) {
-                        mCtrl.$error.required = true;
+                    mCtrl.$setValidity('required', true);
+                    mCtrl.$setValidity('ruleValidator', true);
+                    if (validator.required && (value == undefined || value === null || value.length === 0)) {
+                        mCtrl.$setValidity('required', false);
                     } else {
-                        if (value != null || value.length > 0) {
+                        if (value != undefined && value != null && value.length > 0) {
                             var found = false;
                             for (var i = 0; i < validator.setValues.length && !found; i++) {
                                 if (value === validator.setValues[i].code) {
