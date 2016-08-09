@@ -81,9 +81,15 @@
                             selectValidator(scope.$eval(attr.ngModel));
                         }
                     } else if (validator.type === 'integer') {
-                        mCtrl.$parsers.push(integerValidator);
-                        //integerValidator(scope.$parent.$eval(attr.ngModel));
-                        integerValidator(scope.$eval(attr.ngModel));
+                        if (rule_1.endsWith('Date')) {
+                            //mCtrl.$parsers.push(dateValidator);
+                            //integerValidator(scope.$parent.$eval(attr.ngModel));
+                            //dateValidator(scope.$eval(attr.ngModel));
+                        } else {
+                            mCtrl.$parsers.push(integerValidator);
+                            //integerValidator(scope.$parent.$eval(attr.ngModel));
+                            integerValidator(scope.$eval(attr.ngModel));
+                        }
                     } else if (validator.type === 'decimal') {
                         mCtrl.$parsers.push(decimalValidator);
                         //decimalValidator(scope.$parent.$eval(attr.ngModel));
@@ -135,6 +141,14 @@
                             value.length > validator.length) {
                             mCtrl.$setValidity('ruleValidator', false);
                         }
+                    }
+                    return value;
+                }
+
+                function dateValidator(value) {
+                    mCtrl.$setValidity('required', true);
+                    if (validator.required && (value == undefined || value === null || value.length === 0)) {
+                        mCtrl.$setValidity('required', false);
                     }
                     return value;
                 }
