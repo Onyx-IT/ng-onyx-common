@@ -91,14 +91,15 @@
                             integerValidator(scope.$eval(attr.ngModel));
                         }
                     } else if (validator.type === 'decimal') {
+
                         mCtrl.$parsers.push(decimalValidator);
                         //decimalValidator(scope.$parent.$eval(attr.ngModel));
                         decimalValidator(scope.$eval(attr.ngModel));
                     } else {
-                        alert("Wrong rule: " + ruleValidator);
+                        //alert("Wrong rule: " + ruleValidator);
                     }
                 } else {
-                    alert("Wrong rule: " + ruleValidator);
+                    //alert("Wrong rule: " + ruleValidator);
                 }
 
                 function obtainNameValidator(ruleName) {
@@ -154,12 +155,23 @@
                 }
 
                 function decimalValidator(value) {
+                    var canBeNegative = false;
+                    if (mCtrl.$name === "adjustmentAmount" ||
+                        mCtrl.$name === "totalTaxAmount" ||
+                        mCtrl.$name === "taxAmount") {
+                        canBeNegative = true;
+                    }
                     mCtrl.$setValidity('required', true);
                     mCtrl.$setValidity('ruleValidator', true);
                     if (validator.required && (value == undefined || value === null || value.length === 0)) {
                         mCtrl.$setValidity('required', false);
                     } else if (value != undefined && value != null && value.length > 0) {
-                        var myRe = /[^0-9\.]/;
+                        var myRe = null;
+                        if (canBeNegative) {
+                            myRe = /[^-?0-9\.]/;
+                        } else {
+                            myRe = /[^0-9\.]/;
+                        }
                         var aux = myRe.exec(value);
                         if ( aux != null ||
                             isNaN(parseFloat(value)) ||
