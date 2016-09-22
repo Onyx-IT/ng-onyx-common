@@ -175,10 +175,10 @@
                         var aux = myRe.exec(value);
                         if ( aux != null ||
                             isNaN(parseFloat(value)) ||
-                            value.length > validator.length ||
                             value.split('.').length > 2 ||
                             value.indexOf('.', value.length - 1) != -1 ||
-                            (value.split('.').length === 2 && value.split('.')[1].length > validator.precision)) {
+                            (value.split('.').length === 1 && value.length > (validator.length - validator.precision)) ||
+                            (value.split('.').length === 2 && (value.split('.')[0].length > (validator.length - validator.precision) || value.split('.')[1].length > validator.precision))) {
                             mCtrl.$setValidity('ruleValidator', false);
                         }
                     }
