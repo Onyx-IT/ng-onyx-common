@@ -158,7 +158,8 @@
                     var canBeNegative = false;
                     if (mCtrl.$name === "adjustmentAmount" ||
                         mCtrl.$name === "totalTaxAmount" ||
-                        mCtrl.$name === "taxAmount") {
+                        mCtrl.$name === "taxAmount" ||
+                        mCtrl.$name === "netCommissionDue") {
                         canBeNegative = true;
                     }
                     mCtrl.$setValidity('required', true);
