@@ -61,6 +61,7 @@
                 var failOutputBase = fail.data;
                 appConfig.message = failOutputBase.errors[0].message;
                 appConfig.errorCode = failOutputBase.errors[0].code;
+                appConfig.exceptionCode = failOutputBase.errors[0].exceptionCode;
                 if (errorLocation) {
                     $location.path(errorLocation);
                 }
