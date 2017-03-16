@@ -59,9 +59,11 @@
                 deferred.resolve(success);
             }, function (fail) {
                 var failOutputBase = fail.data;
-                appConfig.message = failOutputBase.errors[0].message;
-                appConfig.errorCode = failOutputBase.errors[0].code;
-                appConfig.exceptionCode = failOutputBase.errors[0].exceptionCode;
+                if(failOutputBase != null && failOutputBase.errors != null && failOutputBase.errors.length > 0) {
+                    appConfig.message = failOutputBase.errors[0].message;
+                    appConfig.errorCode = failOutputBase.errors[0].code;
+                    appConfig.exceptionCode = failOutputBase.errors[0].exceptionCode;
+                }
                 if (errorLocation) {
                     $location.path(errorLocation);
                 }
