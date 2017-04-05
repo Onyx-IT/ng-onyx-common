@@ -29,22 +29,28 @@
             // the cache
             apiLocation = apiLocation + '?t=' + new Date().getTime();
 
-            if(!responseType)
+            if (!responseType)
                 responseType = "json";
 
             if (contentType) {
-                $http.defaults.headers.put["Content-Type"] = contentType;
+                if (contentType === 'multipart/form-data') {
+                    contentType = undefined;
+                } else {
+                    $http.defaults.headers.put["Content-Type"] = contentType;
+                }
             } else {// default should be JSON
-                $http.defaults.headers.put["Content-Type"] = "application/json";
+                contentType = "application/json";
             }
-
-            $http.defaults.headers.put['Cache-Control'] = 'no-cache';
-            $http.defaults.headers.put['Pragma'] = 'no-cache';
 
             $http({
                 method: callMethod,
                 url: apiLocation,
                 data: payload,
+                headers: {
+                    'Content-Type': contentType,
+                    'Cache-Control': 'no-cache',
+                    'Pragma': 'no-cache'
+                },
                 responseType: responseType
             }).then(function (success) {
                 var responseHeaders = _headersGetter(success.headers);
@@ -59,7 +65,7 @@
                 deferred.resolve(success);
             }, function (fail) {
                 var failOutputBase = fail.data;
-                if(failOutputBase != null && failOutputBase.errors != null && failOutputBase.errors.length > 0) {
+                if (failOutputBase != null && failOutputBase.errors != null && failOutputBase.errors.length > 0) {
                     appConfig.message = failOutputBase.errors[0].message;
                     appConfig.errorCode = failOutputBase.errors[0].code;
                     appConfig.exceptionCode = failOutputBase.errors[0].exceptionCode;
