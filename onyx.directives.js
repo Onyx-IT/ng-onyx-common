@@ -159,6 +159,7 @@
                     if (mCtrl.$name === "adjustmentAmount" ||
                         mCtrl.$name === "totalTaxAmount" ||
                         mCtrl.$name === "taxAmount" ||
+                        mCtrl.$name === "taxPercentageUsed" ||
                         mCtrl.$name === "netCommissionDue") {
                         canBeNegative = true;
                     }
