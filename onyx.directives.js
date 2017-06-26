@@ -176,18 +176,33 @@
                             myRe = /[^0-9\.]/;
                         }
                         var aux = myRe.exec(value);
-                        if ( aux != null ||
-                            isNaN(parseFloat(value)) ||
-                            value.split('.').length > 2 ||
-                            value.indexOf('.', value.length - 1) != -1 ||
-                            (value.split('.').length === 1 && value.length > (validator.length - validator.precision)) ||
-                            (value.split('.').length === 2 && (value.split('.')[0].length > (validator.length - validator.precision) || value.split('.')[1].length > validator.precision))) {
+                        if ( aux != null || isNaN(parseFloat(value)))
+                        {
                             mCtrl.$setValidity('ruleValidator', false);
+                            return value;
+                        }
+                        if (value.startsWith("-")) {
+                            // is a negative number
+                            if (value.split('.').length > 2 ||
+                                value.indexOf('.', value.length - 1) != -1 ||
+                                (value.split('.').length === 1 && value.length > ((validator.length + 1) - validator.precision)) ||
+                                (value.split('.').length === 2 && (value.split('.')[0].length > ((validator.length + 1) - validator.precision) || value.split('.')[1].length > validator.precision))) {
+                                mCtrl.$setValidity('ruleValidator', false);
+                                return value;
+                            }
+                        } else {
+                            // is a positive number
+                            if (value.split('.').length > 2 ||
+                                value.indexOf('.', value.length - 1) != -1 ||
+                                (value.split('.').length === 1 && value.length > (validator.length - validator.precision)) ||
+                                (value.split('.').length === 2 && (value.split('.')[0].length > (validator.length - validator.precision) || value.split('.')[1].length > validator.precision))) {
+                                mCtrl.$setValidity('ruleValidator', false);
+                                return value;
+                            }
                         }
                     }
                     return value;
                 }
-
                 function selectValidator(value) {
                     mCtrl.$setValidity('required', true);
                     mCtrl.$setValidity('ruleValidator', true);
