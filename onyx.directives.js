@@ -160,6 +160,7 @@
                         mCtrl.$name === "totalTaxAmount" ||
                         mCtrl.$name === "taxAmount" ||
                         mCtrl.$name === "taxPercentageUsed" ||
+                        mCtrl.$name === 'totalTaxAmountTax' ||
                         mCtrl.$name === "netCommissionDue") {
                         canBeNegative = true;
                     }
