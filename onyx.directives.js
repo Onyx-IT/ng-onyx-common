@@ -181,7 +181,7 @@
                             mCtrl.$setValidity('ruleValidator', false);
                             return value;
                         }
-                        if (value.startsWith("-")) {
+                        if (value.indexOf("-") === 0) {
                             // is a negative number
                             if (value.split('.').length > 2 ||
                                 value.indexOf('.', value.length - 1) != -1 ||
